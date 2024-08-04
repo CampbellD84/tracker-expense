@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { api } from "@/lib/api"
 
-export const Route = createFileRoute('/_authenticated/create-expense')({
-  component: CreateExpense
+export const Route = createFileRoute("/_authenticated/create-expense")({
+  component: CreateExpense,
 })
 
 function CreateExpense() {
@@ -15,10 +15,9 @@ function CreateExpense() {
   const form = useForm({
     defaultValues: {
       title: '',
-      amount: 0
+      amount: "0"
     },
     onSubmit: async ({value}) => {
-        await new Promise(r => setTimeout(r, 3000))
         const res = await api.expenses.$post({ json: value })
         if (!res.ok) {
           throw new Error("Server Error")
@@ -50,8 +49,8 @@ function CreateExpense() {
                 onBlur={field.handleBlur}
                 onChange={e => field.handleChange(e.target.value)}
               />
-              {field.state.meta.touchedErrors ? (
-                <em>{field.state.meta.touchedErrors}</em>
+              {field.state.meta.errors ? (
+                <em>{field.state.meta.errors.join(', ')}</em>
               ) : null}
             </>
           )}
@@ -68,7 +67,7 @@ function CreateExpense() {
                 value={field.state.value}
                 onBlur={field.handleBlur}
                 type='number'
-                onChange={e => field.handleChange(Number(e.target.value))}
+                onChange={e => field.handleChange(e.target.value)}
               />
               {field.state.meta.errors ? (
                 <em>{field.state.meta.errors.join(', ')}</em>
