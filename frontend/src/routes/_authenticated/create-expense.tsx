@@ -4,6 +4,8 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { useForm } from '@tanstack/react-form'
 import { api } from "@/lib/api"
+import { zodValidator } from "@tanstack/zod-form-adapter"
+import { createExpenseSchema } from "../../../../server/sharedTypes" 
 
 export const Route = createFileRoute("/_authenticated/create-expense")({
   component: CreateExpense,
@@ -13,6 +15,7 @@ function CreateExpense() {
   const navigate = useNavigate()
 
   const form = useForm({
+    validatorAdapter: zodValidator(),
     defaultValues: {
       title: '',
       amount: "0"
@@ -36,11 +39,14 @@ function CreateExpense() {
           e.stopPropagation(); 
           void form.handleSubmit();
         }}
-        className='max-w-xl m-auto' >
+        className='flex flex-col gap-y-4 max-w-xl m-auto' >
         <form.Field
           name='title'
+          validators={{
+            onChange: createExpenseSchema.shape.title,
+          }}
           children={(field) => (
-            <>
+            <div>
               <Label htmlFor={field.name}>Title</Label>
               <Input
                 id={field.name}
@@ -52,14 +58,17 @@ function CreateExpense() {
               {field.state.meta.errors ? (
                 <em>{field.state.meta.errors.join(', ')}</em>
               ) : null}
-            </>
+            </div>
           )}
         />
 
         <form.Field
           name='amount'
+          validators={{
+            onChange: createExpenseSchema.shape.amount,
+          }}
           children={(field) => (
-            <>
+            <div>
               <Label htmlFor={field.name}>Amount</Label>
               <Input
                 id={field.name}
@@ -72,7 +81,7 @@ function CreateExpense() {
               {field.state.meta.errors ? (
                 <em>{field.state.meta.errors.join(', ')}</em>
               ) : null}
-            </>
+            </div>
           )}
         />
         <form.Subscribe
