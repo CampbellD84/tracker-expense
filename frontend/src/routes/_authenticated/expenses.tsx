@@ -14,6 +14,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import ExpenseDeleteButton from "@/components/ExpenseDeleteButton";
 
 export const Route = createFileRoute("/_authenticated/expenses")({
 	component: Expenses,
@@ -36,6 +37,7 @@ function Expenses() {
 						<TableHead>Title</TableHead>
 						<TableHead>Amount</TableHead>
 						<TableHead>Date</TableHead>
+						<TableHead>Delete</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -49,6 +51,9 @@ function Expenses() {
 							<TableCell>{loadingCreateExpense?.expense.amount}</TableCell>
 							<TableCell>
 								{loadingCreateExpense?.expense.date.split("T")[0]}
+							</TableCell>
+							<TableCell className="font-medium">
+								<Skeleton className="h-4" />
 							</TableCell>
 						</TableRow>
 					)}
@@ -67,6 +72,9 @@ function Expenses() {
 											<Skeleton className="h-4" />
 										</TableCell>
 										<TableCell>
+											<TableCell>
+												<Skeleton className="h-4" />
+											</TableCell>
 											<Skeleton className="h-4" />
 										</TableCell>
 									</TableRow>
@@ -77,6 +85,9 @@ function Expenses() {
 									<TableCell>{expense.title}</TableCell>
 									<TableCell>{expense.amount}</TableCell>
 									<TableCell>{expense.date.split("T")[0]}</TableCell>
+									<TableCell>
+										<ExpenseDeleteButton id={expense.id} />
+									</TableCell>
 								</TableRow>
 							))}
 				</TableBody>
